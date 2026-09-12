@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: mart_ingestion_monitoring
+    description: >
+      Monitoring mart containing ingestion metrics, execution duration,
+      watermarks, and pipeline status for each entity.
+
+    columns:
+
+      - name: batch_id
+        description: "Unique identifier for an ingestion batch."
+        tests:
+          - not_null
+
+      - name: entity
+        description: "Entity processed by the ingestion pipeline."
+        tests:
+          - not_null
+
+      - name: started_at
+        description: "UTC timestamp when ingestion started."
+        tests:
+          - not_null
+
+      - name: completed_at
+        description: "UTC timestamp when ingestion completed."
+        tests:
+          - not_null
+
+      - name: records_fetched
+        description: "Number of records fetched from the source API."
+        tests:
+          - not_null
+
+      - name: records_loaded
+        description: "Number of records appended to the ingestion table."
+        tests:
+          - not_null
+
+      - name: duration_seconds
+        description: "Time taken to process the entity."
+        tests:
+          - not_null
+
+      - name: status
+        description: "Raw ingestion status."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - SUCCESS
+                  - FAILED
+
+      - name: ingestion_result
+        description: "Business-friendly interpretation of the ingestion status."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - SUCCESS_WITH_DATA
+                  - SUCCESS_NO_NEW_DATA
+                  - FAILED
+                  - UNKNOWN

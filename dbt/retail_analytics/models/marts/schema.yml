@@ -1,0 +1,408 @@
+version: 2
+
+models:
+
+  - name: fct_orders
+    description: >
+      Order-level fact table containing order attributes, customer information,
+      order value, payment metrics, delivery metrics, and delivery performance.
+      The grain is one row per order.
+
+    columns:
+
+      - name: order_id
+        description: "Unique identifier for an order."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Customer identifier associated with the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: customer_unique_id
+        description: "Unique customer identifier across orders."
+        data_tests:
+          - not_null
+
+      - name: customer_city
+        description: "City associated with the customer."
+
+      - name: customer_state
+        description: "State associated with the customer."
+
+      - name: order_status
+        description: "Current status of the order."
+        data_tests:
+          - not_null
+
+      - name: purchased_at
+        description: "Timestamp when the order was placed."
+        data_tests:
+          - not_null
+
+      - name: approved_at
+        description: "Timestamp when the order payment was approved."
+
+      - name: delivered_to_carrier_at
+        description: "Timestamp when the order was handed to the carrier."
+
+      - name: delivered_to_customer_at
+        description: "Timestamp when the order was delivered to the customer."
+
+      - name: estimated_delivery_at
+        description: "Estimated delivery timestamp."
+
+      - name: delivery_days
+        description: "Number of days between purchase and customer delivery."
+
+      - name: estimated_delivery_days
+        description: "Number of days between purchase and estimated delivery."
+
+      - name: delivered_late
+        description: >
+          Indicates whether the order was delivered after the estimated
+          delivery date. NULL when the required delivery dates are unavailable.
+
+      - name: item_count
+        description: "Number of items included in the order."
+        data_tests:
+          - not_null
+
+      - name: item_value
+        description: "Total value of products included in the order."
+
+      - name: freight_value
+        description: "Total freight value associated with the order."
+
+      - name: payment_value
+        description: "Total payment value associated with the order."
+
+      - name: payment_count
+        description: "Number of payment records associated with the order."
+
+  - name: dim_customers
+    description: >
+      Customer-level dimension containing customer attributes and
+      aggregated purchasing behavior. The grain is one row per unique customer.
+
+    columns:
+
+      - name: customer_unique_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_city
+        description: "Customer city."
+
+      - name: customer_state
+        description: "Customer state."
+
+      - name: first_order_at
+        description: "Timestamp of the customer's first order."
+
+      - name: last_order_at
+        description: "Timestamp of the customer's most recent order."
+
+      - name: total_orders
+        description: "Total number of orders placed by the customer."
+        data_tests:
+          - not_null
+
+      - name: total_spend
+        description: "Total payment value associated with the customer's orders."
+        data_tests:
+          - not_null
+
+      - name: average_order_value
+        description: "Average payment value per order."
+
+      - name: delivered_orders
+        description: "Number of delivered orders."
+
+      - name: cancelled_orders
+        description: "Number of cancelled orders."
+
+      - name: late_orders
+        description: "Number of orders delivered after the estimated date."
+
+  - name: dim_products
+    description: >
+      Product dimension containing product attributes and aggregated
+      sales performance. The grain is one row per product.
+
+    columns:
+
+      - name: product_id
+        description: "Unique identifier for the product."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_category_name
+        description: "Product category. Unknown when the source category is missing."
+
+      - name: product_name_length
+        description: "Length of the product name."
+
+      - name: product_description_length
+        description: "Length of the product description."
+
+      - name: product_photos_qty
+        description: "Number of photos associated with the product."
+
+      - name: product_weight_g
+        description: "Product weight in grams."
+
+      - name: product_length_cm
+        description: "Product length in centimeters."
+
+      - name: product_height_cm
+        description: "Product height in centimeters."
+
+      - name: product_width_cm
+        description: "Product width in centimeters."
+
+      - name: units_sold
+        description: "Total number of units sold for the product."
+        data_tests:
+          - not_null
+
+      - name: order_count
+        description: "Number of distinct orders containing the product."
+        data_tests:
+          - not_null
+
+      - name: total_revenue
+        description: "Total product revenue."
+        data_tests:
+          - not_null
+
+      - name: total_freight
+        description: "Total freight value associated with the product."
+        data_tests:
+          - not_null
+
+      - name: average_item_price
+        description: "Average selling price per unit."
+        data_tests:
+          - not_null
+
+  - name: fct_order_items
+    description: >
+      Order-item level fact table containing product, seller, customer,
+      pricing, freight, and order information.
+      The grain is one row per order item, identified by the combination
+      of order_id and order_item_id.
+
+    columns:
+
+      - name: order_id
+        description: "Identifier of the order containing the item."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: order_item_id
+        description: "Sequential item number within an order."
+        data_tests:
+          - not_null
+
+      - name: customer_id
+        description: "Customer identifier associated with the order."
+        data_tests:
+          - not_null
+
+      - name: customer_unique_id
+        description: "Unique customer identifier across orders."
+        data_tests:
+          - not_null
+
+      - name: product_id
+        description: "Identifier of the product sold."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+
+      - name: seller_id
+        description: "Identifier of the seller associated with the item."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sellers')
+                field: seller_id
+
+      - name: shipping_limit_at
+        description: "Latest timestamp by which the seller should ship the item."
+
+      - name: order_status
+        description: "Status of the associated order."
+        data_tests:
+          - not_null
+
+      - name: purchased_at
+        description: "Timestamp when the associated order was purchased."
+        data_tests:
+          - not_null
+
+      - name: price
+        description: "Selling price of the order item."
+        data_tests:
+          - not_null
+
+      - name: freight_value
+        description: "Freight value associated with the order item."
+        data_tests:
+          - not_null
+
+      - name: item_total_value
+        description: "Total item value calculated as price plus freight value."
+        data_tests:
+          - not_null
+
+  - name: dim_sellers
+    description: >
+      Seller dimension containing seller attributes and aggregated
+      sales, delivery, and review performance. The grain is one row per seller.
+
+    columns:
+
+      - name: seller_id
+        description: "Unique identifier for the seller."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: seller_zip_code_prefix
+        description: "Seller ZIP-code prefix."
+
+      - name: seller_city
+        description: "Seller city."
+
+      - name: seller_state
+        description: "Seller state."
+
+      - name: units_sold
+        description: "Total number of items sold by the seller."
+        data_tests:
+          - not_null
+
+      - name: order_count
+        description: "Number of distinct orders containing seller items."
+        data_tests:
+          - not_null
+
+      - name: product_count
+        description: "Number of distinct products sold by the seller."
+        data_tests:
+          - not_null
+
+      - name: total_revenue
+        description: "Total revenue generated by seller items."
+        data_tests:
+          - not_null
+
+      - name: total_freight
+        description: "Total freight value associated with seller items."
+        data_tests:
+          - not_null
+
+      - name: average_item_price
+        description: "Average selling price per item."
+
+      - name: average_delivery_days
+        description: "Average delivery time for seller orders."
+
+      - name: late_orders
+        description: "Number of seller orders delivered after the estimated date."
+
+      - name: total_orders
+        description: "Number of distinct seller orders."
+
+      - name: late_order_rate
+        description: "Percentage of seller orders delivered late."
+
+      - name: average_review_score
+        description: "Average customer review score associated with the seller."
+
+      - name: review_count
+        description: "Number of reviews associated with the seller."
+
+  - name: mart_customer_rfm
+    description: >
+      Customer RFM segmentation model based on completed delivered orders.
+      The grain is one row per unique customer.
+
+    columns:
+
+      - name: customer_unique_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: last_purchase_at
+        description: "Timestamp of the customer's most recent delivered purchase."
+        data_tests:
+          - not_null
+
+      - name: analysis_date
+        description: >
+          Latest delivered purchase date in the dataset used as the
+          RFM reference date.
+        data_tests:
+          - not_null
+
+      - name: recency
+        description: >
+          Number of days between the customer's latest purchase and the
+          RFM analysis date.
+        data_tests:
+          - not_null
+
+      - name: frequency
+        description: "Number of distinct delivered orders placed by the customer."
+        data_tests:
+          - not_null
+
+      - name: monetary
+        description: "Total payment value from the customer's delivered orders."
+        data_tests:
+          - not_null
+
+      - name: recency_score
+        description: "Recency score from 1 to 5, with 5 representing more recent purchases."
+        data_tests:
+          - not_null
+
+      - name: frequency_score
+        description: "Frequency score from 1 to 5, with 5 representing higher purchase frequency."
+        data_tests:
+          - not_null
+
+      - name: monetary_score
+        description: "Monetary score from 1 to 5, with 5 representing higher customer spend."
+        data_tests:
+          - not_null
+
+      - name: rfm_score
+        description: "Three-digit combined RFM score."
+
+      - name: customer_segment
+        description: "Business-oriented customer segment derived from RFM scores."
+        data_tests:
+          - not_null

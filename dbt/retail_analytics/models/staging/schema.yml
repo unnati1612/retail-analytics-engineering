@@ -1,0 +1,185 @@
+version: 2
+
+models:
+
+  - name: stg_customers
+    description: "Cleaned and standardized customer data."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for an order-level customer record."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_unique_id
+        description: "Identifier representing the unique customer across orders."
+        data_tests:
+          - not_null
+
+      - name: customer_state
+        description: "Brazilian state associated with the customer."
+
+  - name: stg_orders
+    description: "Cleaned and standardized order data."
+
+    columns:
+      - name: order_id
+        description: "Unique identifier for an order."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Customer associated with the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: order_status
+        description: "Current status of the order."
+        data_tests:
+          - not_null
+
+      - name: purchased_at
+        description: "Timestamp when the order was placed."
+        data_tests:
+          - not_null
+
+  - name: stg_order_items
+    description: "Cleaned and standardized order item data."
+
+    columns:
+      - name: order_id
+        description: "Order associated with the item."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: order_item_id
+        description: "Sequential item number within an order."
+        data_tests:
+          - not_null
+
+      - name: product_id
+        description: "Product associated with the order item."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+
+      - name: seller_id
+        description: "Seller associated with the order item."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sellers')
+                field: seller_id
+
+      - name: price
+        description: "Price of the item."
+        data_tests:
+          - not_null
+
+      - name: freight_value
+        description: "Freight cost associated with the item."
+        data_tests:
+          - not_null
+
+  - name: stg_products
+    description: "Cleaned and standardized product data."
+
+    columns:
+      - name: product_id
+        description: "Unique identifier for a product."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_category_name
+        description: "Original product category name."
+
+  - name: stg_payments
+    description: "Cleaned and standardized payment data."
+
+    columns:
+      - name: order_id
+        description: "Order associated with the payment."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: payment_sequential
+        description: "Sequential number of the payment within an order."
+        data_tests:
+          - not_null
+
+      - name: payment_type
+        description: "Payment method used by the customer."
+        data_tests:
+          - not_null
+
+      - name: payment_value
+        description: "Value of the payment."
+        data_tests:
+          - not_null
+
+  - name: stg_reviews
+    description: "Cleaned and standardized order review data."
+
+    columns:
+      - name: review_id
+        description: "Identifier for the review."
+        data_tests:
+          - not_null
+
+      - name: order_id
+        description: "Order associated with the review."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: review_score
+        description: "Customer review score from 1 to 5."
+        data_tests:
+          - not_null
+
+  - name: stg_sellers
+    description: "Cleaned and standardized seller data."
+
+    columns:
+      - name: seller_id
+        description: "Unique identifier for a seller."
+        data_tests:
+          - not_null
+          - unique
+
+  - name: stg_geolocation
+    description: "Cleaned Brazilian geographic and coordinate data."
+
+    columns:
+      - name: geolocation_zip_code_prefix
+        description: "Brazilian ZIP-code prefix."
+        data_tests:
+          - not_null
+
+      - name: latitude
+        description: "Latitude associated with the ZIP-code location."
+
+      - name: longitude
+        description: "Longitude associated with the ZIP-code location."
