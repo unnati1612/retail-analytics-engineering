@@ -1,0 +1,99 @@
+I0912 15:53:21.581820 8464179584 bq_gcloud_utils.py:254] Loading gcloud config
+I0912 15:53:21.581898 8464179584 gcloud_runner.py:44] Found gcloud path: gcloud
+I0912 15:53:21.581942 8464179584 gcloud_runner.py:54] Running gcloud command: gcloud config config-helper --format=json
+I0912 15:53:21.831872 8464179584 bq_gcloud_utils.py:43] The `quota_project_id` flag is using a default value and a value is set in gcloud, using that: CURRENT_PROJECT
+I0912 15:53:21.832010 8464179584 bq_gcloud_utils.py:43] The `universe_domain` flag is using a default value and a value is set in gcloud, using that: googleapis.com
+I0912 15:53:21.832032 8464179584 bq_gcloud_utils.py:43] The `mtls` flag is using a default value and a value is set in gcloud, using that: False
+I0912 15:53:21.832091 8464179584 bq_cached_client.py:104] Creating client for BQ CLI version: 2.1.38
+I0912 15:53:21.832118 8464179584 bq_cached_client.py:120] Client args collected: {'credential_file': '/Users/unnati/.bigquery.v2.token', 'job_property': None, 'project_id': 'retail-analytics-engineering', 'dataset_id': '', 'trace': None, 'sync': True, 'use_google_auth': True, 'api': 'https://bigquery.googleapis.com', 'api_version': 'v2', 'quota_project_id': 'CURRENT_PROJECT', 'request_reason': None, 'location': None, 'wait_printer_factory': <class 'clients.wait_printer.VerboseWaitPrinter'>, 'enable_resumable_uploads': True}
+I0912 15:53:21.832289 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+W0912 15:53:21.832313 8464179584 bq_gcloud_utils.py:51] Executing with different configuration than in gcloud.The flag "mtls" has become set to "False" but gcloud sets "use_client_certificate" as "False".To update the gcloud value, start from `gcloud config list`.
+I0912 15:53:21.832329 8464179584 bq_cached_client.py:104] Creating client for BQ CLI version: 2.1.38
+I0912 15:53:21.832341 8464179584 bq_cached_client.py:120] Client args collected: {'credential_file': '/Users/unnati/.bigquery.v2.token', 'job_property': None, 'project_id': 'retail-analytics-engineering', 'dataset_id': '', 'trace': None, 'sync': True, 'use_google_auth': True, 'api': 'https://bigquery.googleapis.com', 'api_version': 'v2', 'quota_project_id': 'CURRENT_PROJECT', 'request_reason': None, 'location': None, 'wait_printer_factory': <class 'clients.wait_printer.VerboseWaitPrinter'>, 'enable_resumable_uploads': True}
+I0912 15:53:21.832361 8464179584 bq_cached_client.py:141] Credentials loaded using Google Auth
+I0912 15:53:21.832375 8464179584 main_credential_loader.py:56] No `oauth_access_token`, load credentials elsewhere
+I0912 15:53:21.832386 8464179584 main_credential_loader.py:66] No `use_gce_service_account`, load credentials elsewhere
+I0912 15:53:21.832399 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:21.832412 8464179584 gcloud_credential_loader.py:29] Loading auth credentials from gcloud for account: unnatijain1612@gmail.com
+I0912 15:53:21.832499 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:21.832581 8464179584 bq_cached_client.py:207] Successfully created a new client.
+I0912 15:53:21.832732 8464179584 bigquery_client.py:491] BuildApiClient discovery_url: None, discovery_root_url: None
+I0912 15:53:21.832767 8464179584 bigquery_client.py:244] Configured httplib2 with manual proxy
+I0912 15:53:21.833420 8464179584 discovery_document_loader.py:128] Successfully loaded discovery doc from (package, resource): bigquery_client, discovery_next/bigquery.json
+I0912 15:53:21.833456 8464179584 bigquery_client.py:380] The "Service.BIGQUERY" discovery doc is already loaded
+I0912 15:53:21.834701 8464179584 bigquery_client.py:744] Discovery doc routing values being considered for updates: rootUrl: (https://bigquery.googleapis.com/), basePath: (/bigquery/v2/), baseUrl: (https://bigquery.googleapis.com/bigquery/v2/)
+I0912 15:53:21.834726 8464179584 bq_api_utils.py:56] Building a root URL for the Service.BIGQUERY service in the "googleapis.com" universe for region "None" without mTLS, without REP, and without LEP
+I0912 15:53:21.834759 8464179584 bq_api_utils.py:213] Final root URL built as: https://bigquery.googleapis.com/
+I0912 15:53:21.834801 8464179584 bigquery_client.py:761] Discovery doc routing values post updates: rootUrl: (https://bigquery.googleapis.com/), basePath: (/bigquery/v2/), baseUrl: (https://bigquery.googleapis.com/bigquery/v2/)
+I0912 15:53:21.837383 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:21.837434 8464179584 model.py:113] --request-start--
+I0912 15:53:21.837449 8464179584 model.py:114] -headers-start-
+I0912 15:53:21.837457 8464179584 model.py:116] user-agent: google-cloud-sdk583.0.0 google-api-python-client command/bq.update.datasets agent-name/github_copilot_vscode_agent (gzip)
+I0912 15:53:21.837466 8464179584 model.py:116] x-goog-user-project: retail-analytics-engineering
+I0912 15:53:21.837472 8464179584 model.py:116] accept: application/json
+I0912 15:53:21.837478 8464179584 model.py:116] accept-encoding: gzip, deflate
+I0912 15:53:21.837486 8464179584 model.py:116] x-goog-api-client: gdcl/2.2.0 gl-python/3.14.6
+I0912 15:53:21.837491 8464179584 model.py:117] -headers-end-
+I0912 15:53:21.837498 8464179584 model.py:118] -path-parameters-start-
+I0912 15:53:21.837505 8464179584 model.py:120] projectId: retail-analytics-engineering
+I0912 15:53:21.837510 8464179584 model.py:120] datasetId: retail_analytics
+I0912 15:53:21.837517 8464179584 model.py:121] -path-parameters-end-
+I0912 15:53:21.837522 8464179584 model.py:122] body: None
+I0912 15:53:21.837555 8464179584 model.py:123] query: ?accessPolicyVersion=3&alt=json
+I0912 15:53:21.837562 8464179584 model.py:124] --request-end--
+I0912 15:53:21.837615 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:21.837641 8464179584 bigquery_http.py:227] URL being requested from BQ client: GET https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics?accessPolicyVersion=3&alt=json
+I0912 15:53:22.351042 8464179584 bigquery_http.py:211] Response from server with status code: 200
+I0912 15:53:22.351250 8464179584 model.py:192] --response-start--
+I0912 15:53:22.351290 8464179584 model.py:194] etag: qwdXRRn6hREuOh861A03hQ==
+I0912 15:53:22.351315 8464179584 model.py:194] content-type: application/json; charset=UTF-8
+I0912 15:53:22.351333 8464179584 model.py:194] vary: Origin, X-Origin, Referer
+I0912 15:53:22.351350 8464179584 model.py:194] date: Sat, 12 Sep 2026 10:23:22 GMT
+I0912 15:53:22.351364 8464179584 model.py:194] server: ESF
+I0912 15:53:22.351378 8464179584 model.py:194] x-xss-protection: 0
+I0912 15:53:22.351393 8464179584 model.py:194] x-frame-options: SAMEORIGIN
+I0912 15:53:22.351408 8464179584 model.py:194] x-content-type-options: nosniff
+I0912 15:53:22.351419 8464179584 model.py:194] alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+I0912 15:53:22.351433 8464179584 model.py:194] transfer-encoding: chunked
+I0912 15:53:22.351447 8464179584 model.py:194] status: 200
+I0912 15:53:22.351465 8464179584 model.py:194] content-length: 972
+I0912 15:53:22.351479 8464179584 model.py:194] -content-encoding: gzip
+I0912 15:53:22.351490 8464179584 model.py:194] content-location: https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics?accessPolicyVersion=3&alt=json
+I0912 15:53:22.351504 8464179584 model.py:196] b'{\n  "kind": "bigquery#dataset",\n  "etag": "qwdXRRn6hREuOh861A03hQ==",\n  "id": "retail-analytics-engineering:retail_analytics",\n  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics",\n  "datasetReference": {\n    "datasetId": "retail_analytics",\n    "projectId": "retail-analytics-engineering"\n  },\n  "defaultTableExpirationMs": "5184000000",\n  "access": [\n    {\n      "role": "WRITER",\n      "specialGroup": "projectWriters"\n    },\n    {\n      "role": "OWNER",\n      "specialGroup": "projectOwners"\n    },\n    {\n      "role": "OWNER",\n      "userByEmail": "unnatijain1612@gmail.com"\n    },\n    {\n      "role": "READER",\n      "specialGroup": "projectReaders"\n    }\n  ],\n  "creationTime": "1788459290918",\n  "lastModifiedTime": "1788459290918",\n  "location": "asia-south1",\n  "defaultPartitionExpirationMs": "5184000000",\n  "type": "DEFAULT",\n  "isCaseInsensitive": false,\n  "maxTimeTravelHours": "168"\n}\n'
+I0912 15:53:22.351541 8464179584 model.py:197] --response-end--
+I0912 15:53:22.352410 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:22.352516 8464179584 model.py:113] --request-start--
+I0912 15:53:22.352540 8464179584 model.py:114] -headers-start-
+I0912 15:53:22.352556 8464179584 model.py:116] user-agent: google-cloud-sdk583.0.0 google-api-python-client command/bq.update.datasets agent-name/github_copilot_vscode_agent (gzip)
+I0912 15:53:22.352570 8464179584 model.py:116] x-goog-user-project: retail-analytics-engineering
+I0912 15:53:22.352583 8464179584 model.py:116] accept: application/json
+I0912 15:53:22.352596 8464179584 model.py:116] accept-encoding: gzip, deflate
+I0912 15:53:22.352608 8464179584 model.py:116] x-goog-api-client: gdcl/2.2.0 gl-python/3.14.6
+I0912 15:53:22.352622 8464179584 model.py:116] content-type: application/json
+I0912 15:53:22.352634 8464179584 model.py:117] -headers-end-
+I0912 15:53:22.352648 8464179584 model.py:118] -path-parameters-start-
+I0912 15:53:22.352659 8464179584 model.py:120] projectId: retail-analytics-engineering
+I0912 15:53:22.352672 8464179584 model.py:120] datasetId: retail_analytics
+I0912 15:53:22.352684 8464179584 model.py:121] -path-parameters-end-
+I0912 15:53:22.352697 8464179584 model.py:122] body: {"kind": "bigquery#dataset", "etag": "qwdXRRn6hREuOh861A03hQ==", "id": "retail-analytics-engineering:retail_analytics", "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics", "datasetReference": {"datasetId": "retail_analytics", "projectId": "retail-analytics-engineering"}, "defaultTableExpirationMs": "5184000000", "access": [{"role": "WRITER", "specialGroup": "projectWriters"}, {"role": "OWNER", "specialGroup": "projectOwners"}, {"role": "OWNER", "userByEmail": "unnatijain1612@gmail.com"}, {"role": "READER", "specialGroup": "projectReaders"}], "creationTime": "1788459290918", "lastModifiedTime": "1788459290918", "location": "asia-south1", "defaultPartitionExpirationMs": "5184000000", "type": "DEFAULT", "isCaseInsensitive": false, "maxTimeTravelHours": "168", "labels": {}, "resourceTags": {}}
+I0912 15:53:22.352712 8464179584 model.py:123] query: ?accessPolicyVersion=3&alt=json
+I0912 15:53:22.352725 8464179584 model.py:124] --request-end--
+I0912 15:53:22.352798 8464179584 bq_gcloud_utils.py:251] Using cached gcloud config
+I0912 15:53:22.352835 8464179584 bigquery_http.py:227] URL being requested from BQ client: PATCH https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics?accessPolicyVersion=3&alt=json
+I0912 15:53:24.818969 8464179584 bigquery_http.py:211] Response from server with status code: 200
+I0912 15:53:24.819214 8464179584 model.py:192] --response-start--
+I0912 15:53:24.819278 8464179584 model.py:194] etag: bik6trTp4RWczUbD04bfDg==
+I0912 15:53:24.819318 8464179584 model.py:194] content-type: application/json; charset=UTF-8
+I0912 15:53:24.819353 8464179584 model.py:194] vary: Origin, X-Origin, Referer
+I0912 15:53:24.819386 8464179584 model.py:194] date: Sat, 12 Sep 2026 10:23:24 GMT
+I0912 15:53:24.819429 8464179584 model.py:194] server: ESF
+I0912 15:53:24.819461 8464179584 model.py:194] x-xss-protection: 0
+I0912 15:53:24.819491 8464179584 model.py:194] x-frame-options: SAMEORIGIN
+I0912 15:53:24.819520 8464179584 model.py:194] x-content-type-options: nosniff
+I0912 15:53:24.819550 8464179584 model.py:194] alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+I0912 15:53:24.819581 8464179584 model.py:194] transfer-encoding: chunked
+I0912 15:53:24.819610 8464179584 model.py:194] status: 200
+I0912 15:53:24.819642 8464179584 model.py:194] content-length: 997
+I0912 15:53:24.819673 8464179584 model.py:194] -content-encoding: gzip
+I0912 15:53:24.819705 8464179584 model.py:196] b'{\n  "kind": "bigquery#dataset",\n  "etag": "bik6trTp4RWczUbD04bfDg==",\n  "id": "retail-analytics-engineering:retail_analytics",\n  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/retail-analytics-engineering/datasets/retail_analytics",\n  "datasetReference": {\n    "datasetId": "retail_analytics",\n    "projectId": "retail-analytics-engineering"\n  },\n  "defaultTableExpirationMs": "5184000000",\n  "access": [\n    {\n      "role": "WRITER",\n      "specialGroup": "projectWriters"\n    },\n    {\n      "role": "OWNER",\n      "specialGroup": "projectOwners"\n    },\n    {\n      "role": "OWNER",\n      "userByEmail": "unnatijain1612@gmail.com"\n    },\n    {\n      "role": "READER",\n      "specialGroup": "projectReaders"\n    }\n  ],\n  "creationTime": "1788459290918",\n  "lastModifiedTime": "1789208602825",\n  "location": "asia-south1",\n  "defaultPartitionExpirationMs": "5184000000",\n  "satisfiesPzs": false,\n  "type": "DEFAULT",\n  "isCaseInsensitive": false,\n  "maxTimeTravelHours": "168"\n}\n'
+I0912 15:53:24.819770 8464179584 model.py:197] --response-end--
