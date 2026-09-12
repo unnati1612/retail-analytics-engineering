@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - main
-      - master
-      - develop
-
-  pull_request:
-    branches:
-      - main
-      - master
-      - develop
 
   workflow_dispatch:
 
@@ -20,6 +12,10 @@ jobs:
     name: Python and dbt checks
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -27,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: "3.14"
+          python-version: "3.13"
           cache: "pip"
 
       - name: Install dependencies
@@ -41,8 +37,15 @@ jobs:
             ingestion \
             source_api
 
-      - name: Validate dbt project
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: retail-analytics-engineering
+          workload_identity_provider: "projects/356427557562/locations/global/workloadIdentityPools/github/providers/retail-analytics"
+          service_account: github-ci@retail-analytics-engineering.iam.gserviceaccount.com
+
+      - name: Run dbt tests
         working-directory: dbt/retail_analytics
         run: |
-          dbt parse \
-            --profiles-dir ../../airflow/config/dbt
+          dbt test \
+            --profiles-dir ../../.github/dbt

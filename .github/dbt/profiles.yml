@@ -1,0 +1,15 @@
+retail_analytics:
+  target: ci
+
+  outputs:
+    ci:
+      type: bigquery
+      method: oauth
+
+      project: retail-analytics-engineering
+      dataset: retail_analytics
+
+      threads: 2
+      timeout_seconds: 300
+      location: asia-south1
+      priority: interactive
