@@ -1,0 +1,23 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+
+# dbt
+target/
+dbt_packages/
+logs/
+
+# Airflow
+airflow/logs/
+airflow/airflow.cfg
+airflow/standalone_admin_password.txt
+
+# OS
+.DS_Store
+
+data/
+source_api/ecommerce_source.db
+
+*.md
+CHANGES_SUMMARY.txt

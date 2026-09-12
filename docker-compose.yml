@@ -1,0 +1,237 @@
+services:
+
+  postgres:
+    image: postgres:16
+
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U airflow -d airflow"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  airflow-init:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: >-
+        postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+
+      - ./ingestion:/opt/airflow/project/ingestion
+      - ./source_api:/opt/airflow/project/source_api
+      - ./dbt:/opt/airflow/project/dbt
+
+      - ./airflow/config:/opt/airflow/config
+
+    command:
+      [
+        "db",
+        "migrate"
+      ]
+
+
+  airflow-api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: >-
+        postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Kolkata
+
+      AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_JWT_SECRET}
+
+      # AIRFLOW__CORE__EXECUTION_API_SERVER_URL: http://airflow-api-server:8080/execution/
+
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      BQ_DATASET_RAW: ${BQ_DATASET_RAW}
+      BQ_DATASET_STAGING: ${BQ_DATASET_STAGING}
+      BQ_DATASET_ANALYTICS: ${BQ_DATASET_ANALYTICS}
+
+      SOURCE_API_URL: http://source-api:8000
+
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/gcp/application_default_credentials.json
+
+      DBT_PROFILES_DIR: /opt/airflow/config/dbt
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+
+      - ./ingestion:/opt/airflow/project/ingestion
+      - ./source_api:/opt/airflow/project/source_api
+      - ./dbt:/opt/airflow/project/dbt
+
+      - ./airflow/config:/opt/airflow/config
+
+      - ~/.config/gcloud/application_default_credentials.json:/opt/gcp/application_default_credentials.json:ro
+
+    ports:
+      - "8080:8080"
+
+    command:
+      [
+        "api-server",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8080"
+      ]
+
+
+  airflow-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: >-
+        postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Kolkata
+
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Kolkata
+
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_JWT_SECRET}
+
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+
+      AIRFLOW__CORE__EXECUTION_API_SERVER_URL: "http://airflow-api-server:8080/execution/"
+
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      BQ_DATASET_RAW: ${BQ_DATASET_RAW}
+      BQ_DATASET_STAGING: ${BQ_DATASET_STAGING}
+      BQ_DATASET_ANALYTICS: ${BQ_DATASET_ANALYTICS}
+
+      SOURCE_API_URL: http://source-api:8000
+
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/gcp/application_default_credentials.json
+
+      DBT_PROFILES_DIR: /opt/airflow/config/dbt
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+
+      - ./ingestion:/opt/airflow/project/ingestion
+      - ./source_api:/opt/airflow/project/source_api
+      - ./dbt:/opt/airflow/project/dbt
+
+      - ./airflow/config:/opt/airflow/config
+
+      - ~/.config/gcloud/application_default_credentials.json:/opt/gcp/application_default_credentials.json:ro
+
+    command:
+      [
+        "scheduler"
+      ]
+
+
+  airflow-dag-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: >-
+        postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      BQ_DATASET_RAW: ${BQ_DATASET_RAW}
+      BQ_DATASET_STAGING: ${BQ_DATASET_STAGING}
+      BQ_DATASET_ANALYTICS: ${BQ_DATASET_ANALYTICS}
+
+      SOURCE_API_URL: http://source-api:8000
+
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/gcp/application_default_credentials.json
+
+      DBT_PROFILES_DIR: /opt/airflow/config/dbt
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+
+      - ./ingestion:/opt/airflow/project/ingestion
+      - ./source_api:/opt/airflow/project/source_api
+      - ./dbt:/opt/airflow/project/dbt
+
+      - ./airflow/config:/opt/airflow/config
+
+      - ~/.config/gcloud/application_default_credentials.json:/opt/gcp/application_default_credentials.json:ro
+
+    command:
+      [
+        "dag-processor"
+      ]
+
+
+  source-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.source_api
+
+    volumes:
+      - ./source_api:/app/source_api
+
+    ports:
+      - "8000:8000"
+
+
+volumes:
+  postgres-db-volume:

@@ -1,0 +1,15 @@
+.git
+.gitignore
+
+.venv
+.venv-airflow
+__pycache__
+*.pyc
+
+data
+
+dbt/retail_analytics/target
+dbt/retail_analytics/dbt_packages
+dbt/retail_analytics/logs
+
+airflow/logs
