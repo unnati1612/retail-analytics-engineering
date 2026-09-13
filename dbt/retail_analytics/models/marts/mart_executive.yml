@@ -1,0 +1,95 @@
+version: 2
+
+models:
+
+  - name: mart_daily_sales
+    description: >
+      Daily sales, customer, payment coverage, and delivery performance
+      metrics derived from the order fact table.
+
+    columns:
+
+      - name: sales_date
+        description: "Date on which orders were purchased."
+        tests:
+          - not_null
+          - unique
+
+      - name: total_orders
+        description: "Distinct number of orders purchased on the date."
+        tests:
+          - not_null
+
+      - name: unique_customers
+        description: "Distinct customers placing orders on the date."
+        tests:
+          - not_null
+
+      - name: total_sales
+        description: "Total merchandise value of items purchased on the date."
+        tests:
+          - not_null
+
+      - name: total_freight
+        description: "Total freight value associated with orders on the date."
+
+      - name: recorded_payment_value
+        description: >
+          Total payment value recorded in the payment source.
+          May be lower than total sales when payment records are missing.
+
+      - name: average_order_value
+        description: "Average merchandise value per order."
+
+      - name: average_delivery_days
+        description: "Average number of days from purchase to customer delivery."
+
+      - name: late_deliveries
+        description: "Number of delivered orders that arrived after the estimated delivery date."
+
+      - name: delivered_orders
+        description: "Number of orders with delivered status."
+
+      - name: orders_with_payment
+        description: "Number of orders with at least one payment record."
+
+      - name: payment_coverage_rate
+        description: "Percentage of orders with at least one payment record."
+
+
+  - name: mart_executive_kpis
+    description: >
+      One-row executive KPI model containing overall sales,
+      customer, payment coverage, and delivery performance metrics.
+
+    columns:
+
+      - name: total_orders
+        description: "Total distinct orders."
+
+      - name: total_customers_with_orders
+        description: "Total distinct customers with orders."
+
+      - name: total_sales
+        description: "Total merchandise value across orders."
+
+      - name: total_freight
+        description: "Total freight value across orders."
+
+      - name: recorded_payment_value
+        description: "Total payment value recorded in the payment source."
+
+      - name: average_order_value
+        description: "Average merchandise value per order."
+
+      - name: average_delivery_days
+        description: "Average delivery time in days."
+
+      - name: late_delivery_rate
+        description: "Percentage of delivered orders delivered late."
+
+      - name: payment_coverage_rate
+        description: "Percentage of orders with at least one payment record."
+
+      - name: repeat_customer_rate
+        description: "Percentage of customers with more than one order."
